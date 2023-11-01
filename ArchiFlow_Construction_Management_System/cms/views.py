@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from allauth.account.views import SignupView, LoginView
-from .forms import UserRegistrationForm, SuperuserRegistrationForm, EditProfileForm, EditCompanyProfileForm, UserInvitationForm, UserLoginForm
-from .models import UserProfile, CompanyProfile, Company, Invitation, User
+import requests
+from .forms import UserRegistrationForm, SuperuserRegistrationForm, EditProfileForm, EditCompanyProfileForm, UserInvitationForm, UserLoginForm, AddProjectForm
+from .models import UserProfile, CompanyProfile, Company, Invitation, User, Project
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.conf import settings
@@ -316,7 +317,7 @@ class UpdateCompanyProfileView(TemplateView):
         return self.render_to_response(context)
     
 class CompanyUsersListView(TemplateView):
-    template_name = 'company_users.html'
+    template_name = 'account/company_users.html'
 
     def get_context_data(self, **kwargs):
         try:
@@ -335,7 +336,38 @@ class CompanyUsersListView(TemplateView):
         return context 
 
 class CompanyProjectsView(TemplateView):
-    template_name = 'company_projects.html'
+    template_name = 'projects/company_projects.html'
+
+    def get_context_data(self, **kwargs):
+        user_profile = UserProfile.objects.get(user=self.request.user)
+        company_name = self.request.user.company.legal_name
+        company = Company.objects.get(legal_name=company_name)
+        projects = Project.objects.filter(company=company)
+
+        context = {
+            'user_profile': user_profile,
+            'projects': projects
+        }
+
+        return context 
+    
+class CompanyAddProjectView(TemplateView):
+    template_name = 'projects/add_project.html'
+
+    def get(self, request, *args, **kwargs):
+        add_project_form = AddProjectForm()  # Initialize an instance of AddProjectForm
+        return render(request, self.template_name, {'add_project_form': add_project_form})
+
+    def post(self, request, *args, **kwargs):
+        add_project_form = AddProjectForm(request.POST, request.FILES)  # Bind the form data to POST data
+
+        if add_project_form.is_valid():
+            # If the form is valid, save the project to the database
+            project = add_project_form.save()
+            return redirect('company_projects')
+        else:
+            messages.error(request, "Form not Valid!")
+            return render(request, self.template_name, {'add_project_form': add_project_form})
 
     def get_context_data(self, **kwargs):
         user_profile = UserProfile.objects.get(user=self.request.user)
@@ -344,7 +376,8 @@ class CompanyProjectsView(TemplateView):
             'user_profile': user_profile,
         }
 
-        return context 
+        return context
+    
           
 def landing_page(request):
     return render(request, "ArchiFlow/landing_page.html", {})

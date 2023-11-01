@@ -25,7 +25,8 @@ from .views import (
     CompanyUsersListView,
     SuperuserInvitationView,
     RegistrationErrorView,
-    CustomLoginView
+    CustomLoginView,
+    CompanyAddProjectView
 )
 
 router = routers.DefaultRouter()
@@ -55,6 +56,7 @@ urlpatterns = [
     path('accounts/edit_company_profile/', UpdateCompanyProfileView.as_view(), name="update_company_profile"),
     path('accounts/company_users/', CompanyUsersListView.as_view(), name="company_users"),
     path('accounts/company_projects/', CompanyProjectsView.as_view(), name="company_projects"),
+    path('accounts/add_project/', CompanyAddProjectView.as_view(), name="add_project"),
 ]
 
 if settings.DEBUG:

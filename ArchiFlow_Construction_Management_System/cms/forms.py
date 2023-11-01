@@ -1,6 +1,6 @@
 from allauth.account.forms import SignupForm, LoginForm
 from django import forms
-from .models import Company, CompanyProfile, UserProfile, User
+from .models import Company, CompanyProfile, UserProfile, User, Project
 
 class UserRegistrationForm(SignupForm):
     # Fields for normal users
@@ -58,3 +58,24 @@ class EditCompanyProfileForm(forms.ModelForm):
     class Meta:
         model = CompanyProfile
         fields = ['abbreviated_name', 'contact_email', 'phone', 'city', 'sub_city', 'country', 'website', 'description', 'logo']
+
+class AddProjectForm(forms.ModelForm):   
+    class Meta:
+        model = Project
+        fields = ['company', 'name', 'description', 'status', 'start_date', 'end_date', 'location', 'owner', 'thumbnail_image']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'class': 'datepicker'}),
+            'end_date': forms.DateInput(attrs={'class': 'datepicker'})
+        }
+
+    # You can add more styling attributes to each field if needed
+    def __init__(self, *args, **kwargs):
+        super(AddProjectForm, self).__init__(*args, **kwargs)
+
+        # Add Bootstrap classes to form fields
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
+
+        # Add Bootstrap classes to specific fields
+        self.fields['start_date'].widget.attrs['class'] = 'form-control datepicker'
+        self.fields['end_date'].widget.attrs['class'] = 'form-control datepicker'

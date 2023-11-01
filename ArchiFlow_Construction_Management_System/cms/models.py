@@ -23,6 +23,7 @@ class Project(models.Model):
     end_date = models.DateField(blank=True)
     location = models.CharField(max_length=100)
     owner = models.CharField(max_length=100)
+    thumbnail_image = models.ImageField(default='OIP.jpg', upload_to="project_thumbnail_images/", blank=True, null=True)
 
     def __str__(self) -> str:
         return self.name
