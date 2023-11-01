@@ -1,0 +1,85 @@
+{% extends "account/base.html" %}
+
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "LogIn" %}{% endblock head_title %}
+
+{% block content %}
+
+
+{% get_providers as socialaccount_providers %}
+
+<div class="container py-5 h-100">
+  <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="col col-xl-10">
+      <div class="row g-0">
+        <div class="col-md-6 col-lg-7 d-flex align-items-center">
+          <div class="card-body p-4 p-lg-5 text-black">
+          {% if socialaccount_providers %}
+            <div class="socialaccount_ballot">
+                <ul class="socialaccount_providers list-unstyled justify-content-center">
+                  {% for provider in socialaccount_providers %}
+                  <li>
+                      <a href="{% provider_login_url provider.id %}" class="btn btn-block w-100" style="background-color: #7EE0FF;">
+                          <div class="d-flex justify-content-center">
+                              <i class="material-icons mr-2">account_box</i>
+                                Login with {{ provider.name }}
+                          </div>
+                      </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+            </div>
+            <div class="divider-line text-center mb-4">
+              <hr class="line">
+              <span class="or-text">OR</span>
+            </div>
+            {% include "socialaccount/snippets/login_extra.html" %}
+          {% else %}
+            <p>{% blocktrans %}If you have not created an account yet, then please
+            <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+          {% endif %}
+            <form class="login" method="post" action="{% url 'account_login' %}">
+              {% csrf_token %}
+              {{ form.non_field_errors | safe }}
+              <input type="hidden" name="remember" value="true" />
+              <div>
+                <div class="form-outline mb-4">
+                  {{ form.email.errors | safe }}
+                  <label for="email" class="form-label">Email Address</label>
+                  <input type="email" name="email" class="form-control" id="email">
+                </div>
+                <div class="form-outline mb-4">
+                  {{ form.password1.errors | safe }}
+                  <label for="id_password1" class="form-label">Password</label>
+                  <input type="password" name="password1" class="form-control" id="id_password1">
+                </div>
+                <div class="form-check mb-4">
+                  <input type="checkbox" name="remember" class="form-check-input" id="remember">
+                  <label class="form-check-label" for="remember">{% trans "Remember Me" %}</label>
+                </div>
+              </div>
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}
+              <div class="d-flex flex-column align-items-center text-center">
+                {% if redirect_field_value %}
+                  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                  <a class="button secondaryAction mb-4" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+                  <button class="primaryAction btn btn-lg" type="submit" style="background-color: #7EE0FF;">{% trans "Login" %}</button>
+              </div>
+          </form>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-5 d-none d-md-block d-flex align-items-center">
+          <img src="../../static/images/Logo.png"
+            alt="login form" class="img-fluid" style="border-radius: 0;" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

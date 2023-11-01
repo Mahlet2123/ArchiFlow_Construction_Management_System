@@ -1,0 +1,78 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load socialaccount %}
+
+{% block head_title %}{% trans "Register" %}{% endblock head_title %}
+
+{% block content %}
+
+{% get_providers as socialaccount_providers %}
+
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+                {% if socialaccount_providers %}
+                <div class="socialaccount_ballot">
+                    <ul class="socialaccount_providers list-unstyled justify-content-center">
+                        {% for provider in socialaccount_providers %}
+                        <li>
+                            <a href="{% provider_login_url provider.id %}" class="btn btn-block w-100" style="background-color: #7EE0FF;">
+                                <div class="d-flex justify-content-center">
+                                    <i class="material-icons mr-2">account_box</i>
+                                      Register with {{ provider.name }}
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="divider-line text-center mb-4">
+                    <hr class="line">
+                    <span class="or-text">OR</span>
+                </div>
+                {% endif %}
+                <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                  {% csrf_token %}
+                  {{ form.non_field_errors | safe }}
+                  <input type="hidden" name="token" value="{{ token }}">
+                  <input type="hidden" name="remember" value="true" />
+                  <div>
+                    <div class="form-outline mb-4">
+                      {{ form.email.errors | safe }}
+                      <label for="email" class="form-label">Email Address</label>
+                      <input type="email" name="email" class="form-control" id="email" value="{{ form.email.value }}">
+                    </div>
+                    <div class="form-outline mb-4">
+                      {{ form.password1.errors | safe }}
+                      <label for="id_password1" class="form-label">Password</label>
+                      <input type="password" name="password1" class="form-control" id="id_password1">
+                    </div>
+                    <div class="form-outline mb-4">
+                      {{ form.password2.errors | safe }}
+                      <label for="password2" class="form-label ">Confirm Password</label>
+                      <input type="password" name="password2" class="form-control" id="id_password2">
+                    </div>
+                  </div>
+                  {% if redirect_field_value %}
+                  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                  {% endif %}
+                  <div class="d-flex flex-column align-items-center text-center">
+                      <button class="btn btn-lg" type="submit" style="background-color: #7EE0FF;">{% trans "Register" %}</button>
+                      <div class="my-4">{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">Login</a>.{% endblocktrans %}</div>
+                  </div>
+              </form>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img src="../../static/images/Logo.png"
+                alt="login form" class="img-fluid" style="border-radius: 0;" />
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

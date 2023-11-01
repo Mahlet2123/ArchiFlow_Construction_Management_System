@@ -1,0 +1,69 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Edit Company Profile" %}{% endblock head_title %}
+
+{% block content %}
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><strong>Edit User Profile</strong></h2>
+    </div>
+    <h6><strong>N/A if not available</strong></h6>
+    <div class="row">
+        <div class="col-md-7 border-right">
+            <div class="p-3 py-5">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mt-4">
+                    <div class="col-md-12 mt-3 text-center">
+                        <img class="rounded-circle mt-5" style="width: 150px; height: 150px;" src="{{ company_profile_form.logo.value.url }}" alt="Logo">
+                        <div class="mt-3 mb-5">
+                            <label class="btn btn-primary" for="{{ company_profile_form.logo.id_for_label }}">Update Logo</label>
+                            <input type="file" class="custom-file-input d-none" id="{{ company_profile_form.logo.id_for_label }}" name="{{ company_profile_form.profile_image.name }}">
+                        </div>
+                    </div>                  
+                    <div class="col-md-6">
+                        <label class="labels" for="{{ company_profile_form.abbreviated_name.id_for_label }}">Abbreviated Name</label>
+                        <input type="text" class="form-control" name="{{ company_profile_form.abbreviated_name.name }}" id="{{ company_profile_form.abbreviated_name.id_for_label }}" value="{{ company_profile_form.abbreviated_name.value }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labels" for="{{ company_profile_form.contact_email.id_for_label }}">Contact Email</label>
+                        <input type="text" class="form-control" name="{{ company_profile_form.contact_email.name }}" id="{{ company_profile_form.contact_email.id_for_label }}" value="{{ company_profile_form.contact_email.value }}">
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <label class="labels" for="{{ company_profile_form.phone.id_for_label }}">Phone Number</label>
+                        <input type="text" class="form-control" name="{{ company_profile_form.phone.name }}" id="{{ company_profile_form.phone.id_for_label }}" value="{{ company_profile_form.phone.value }}">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels" for="{{ company_profile_form.city.id_for_label }}">City</label>
+                        <input type="text" class="form-control" name="{{ company_profile_form.city.name }}" id="{{ company_profile_form.city.id_for_label }}" value="{{ company_profile_form.city.value }}">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels" for="{{ company_profile_form.sub_city.id_for_label }}">Sub-City</label>
+                        <input type="text" class="form-control" name="{{ company_profile_form.sub_city.name }}" id="{{ company_profile_form.sub_city.id_for_label }}" value="{{ company_profile_form.sub_city.value }}">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels" for="{{ company_profile_form.country.id_for_label }}">Country</label>
+                        <input type="text" class="form-control" name="{{ company_profile_form.country.name }}" id="{{ company_profile_form.country.id_for_label }}" value="{{ company_profile_form.country.value }}">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels" for="{{ company_profile_form.website.id_for_label }}">Website</label>
+                        <input type="text" class="form-control" name="{{ company_profile_form.website.name }}" id="{{ company_profile_form.website.id_for_label }}" value="{{ company_profile_form.website.value }}">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels" for="{{ company_profile_form.description.id_for_label }}">Description</label>
+                        <input type="text" class="form-control" name="{{ company_profile_form.description.name }}" id="{{ company_profile_form.description.id_for_label }}" value="{{ company_profile_form.description.value }}">
+                    </div>
+                </div>
+                <div class="d-flex flex-column align-items-center text-center mt-4">
+                    <button class="primaryAction btn btn-lg" type="submit" style="background-color: #7EE0FF;">{% trans "Update Profile" %}</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

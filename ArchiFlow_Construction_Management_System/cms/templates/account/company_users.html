@@ -1,0 +1,41 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Company Users" %}{% endblock head_title %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><strong>Company Users</strong></h2>
+        <div>
+            <button class="primaryAction btn" style="background-color: #7EE0FF; border: none;" type="submit" href="{% url 'invite_user' %}" >Add New</button>
+        </div>
+    </div>
+    <div>
+        <hr>
+        <table id="userTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Full Name & Role</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be populated here -->
+                {% for user in users %}
+                <tr>
+                    <td class="align-middle"><img src="{{ user.profile_image.url }}" alt="{{ user.first_name }} Image" class="img-thumbnail" style="max-width: 100px;"></td>
+                    <td class="align-middle">{{ user.first_name }} {{ user.last_name}} <br> {{ user.title }}</td>
+                    <td class="align-middle">{{ user.user.email }}</td>
+                    <td class="align-middle">{{ user.phone_number }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

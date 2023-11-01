@@ -1,0 +1,56 @@
+{% extends "account/base.html" %}
+
+
+{% load i18n %}
+
+{% block head_title %}{% trans "User Profile" %}{% endblock head_title %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><strong>User Profile</strong></h2>
+    </div>
+    <div class="row">
+        <div class="col-md-5 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" width="150px" height="150px" src="/media/{{ user_profile.profile_image }}">
+                <h5 class="font-weight-bold mt-3">{{ user_profile.first_name }} {{ user_profile.last_name }}</h5>
+                <p class="text-black-50">{{ user_profile.title }}</p>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="p-3 py-5">
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Address</strong></p>
+                        <p class="text-muted">{{ user_profile.address }}, {{ user_profile.country }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Phone Number</strong></p>
+                        <p class="text-muted">{{ user_profile.phone_number }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Email Address</strong></p>
+                        <p class="text-muted">{{ user.email }}</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Bio</strong></p>
+                        <p class="text-muted">{{ user_profile.bio }}</p>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
