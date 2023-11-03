@@ -1,0 +1,84 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "ArchiFlow - Construction Management System" %}{% endblock head_title %}
+
+{% block content %}
+<!-- Image Section with Dark Background -->
+<div style="background-color: #2A4365">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <img src="../../static/images/background00.jpg" alt="Construction Image" style="height: 500px; object-fit: cover;">
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <!-- Text Section -->
+            <div class="col-lg-12">
+                <div class="brand-info text-center text-white p-5">
+                    <h1 class="display-2">About ArchiFlow</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12 text-center text-muted">
+            <p class="lead">
+                Welcome to ArchiFlow, your trusted Construction Management System (CMS) designed to streamline and enhance the way architecture and construction projects are managed. ArchiFlow is more than just a software solution; it's a commitment to excellence and efficiency in the construction industry.
+            </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mt-4">Our Mission</h4>
+            <p>
+                At ArchiFlow, our mission is to empower architects, contractors, project managers, and clients with a comprehensive platform that simplifies the complexities of construction project management. We believe that collaboration, organization, and accessibility are the cornerstones of success in the architecture and construction sector. Our platform is meticulously crafted to help professionals like you take control of your projects and deliver outstanding results.
+            </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mt-4">Our Vision</h4>
+            <p>
+                We envision a future where construction projects are executed seamlessly, with teams working together harmoniously, and every stakeholder having easy access to critical project information. ArchiFlow is built to turn this vision into reality by providing an all-in-one hub for project documentation, communication, and collaboration. We see a world where technology makes the construction industry smarter, more efficient, and environmentally sustainable.
+            </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mt-4">Our Team</h4>
+            <p>
+                ArchiFlow is the brainchild of a dedicated team of professionals with a deep passion for architecture, construction, and technology. We are committed to supporting your journey to success by providing the best tools and resources for your projects.
+            </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mt-4">Join Us on the ArchiFlow Journey</h4>
+            <p>
+                We invite you to join us on the ArchiFlow journey and experience the future of construction project management. Whether you are an architect, contractor, project manager, or client, ArchiFlow is your partner in achieving your construction goals. Discover the power of streamlined project management, clear communication, and efficient collaboration with ArchiFlow.
+            </p>
+        </div>
+        <div class="col-12 text-center text-muted mt-5">
+            <p class="lead">
+                <strong>Welcome to the future of construction management. Welcome to ArchiFlow.</strong>
+            </p>
+        </div>
+        <div class="col-lg-12">
+            <div class="brand-info text-center text-black p-5">
+                <img src="../../static/images/Logo black.png" alt="Logo" width="400" height="400" class="d-inline-block align-text-top">
+                <p>Enhancing Collaboration and Efficiency in Construction Management</p>
+                <a href="{% url 'company_signup' %}" class="btn btn-primary" style="background-color: #7EE0FF;">Get Started</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

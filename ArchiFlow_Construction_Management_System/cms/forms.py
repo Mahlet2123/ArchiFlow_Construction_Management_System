@@ -11,12 +11,18 @@ class UserRegistrationForm(SignupForm):
     token = forms.CharField(widget=forms.HiddenInput, required=False)
 
 class UserLoginForm(LoginForm):
-    # Fields for normal users
-    email = forms.EmailField(label="Email Address")
-    password1 = forms.CharField(widget=forms.PasswordInput, label="Password")
-    password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+    class Meta:
+        fields = ['email', 'password']
 
+    def __init__(self, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
 
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
+        
+        self.fields['remember'].widget.attrs['class'] = 'form-check-label'
+
+    
 class SuperuserRegistrationForm(SignupForm):
     # Fields for superusers
     company_legal_name = forms.CharField(max_length=30, label="Company Legal Name", required=True)
@@ -48,16 +54,38 @@ class UserInvitationForm(forms.ModelForm):
         model = User
         fields = ['email']
 
+    def __init__(self, *args, **kwargs):
+        super(UserInvitationForm, self).__init__(*args, **kwargs)
+
+        # Add Bootstrap classes to form fields
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
+
 
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['first_name', 'last_name', 'address', 'country', 'phone_number', 'title', 'bio', 'profile_image']
 
+    def __init__(self, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+
+        # Add Bootstrap classes to form fields
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
+
+
 class EditCompanyProfileForm(forms.ModelForm):
     class Meta:
         model = CompanyProfile
         fields = ['abbreviated_name', 'contact_email', 'phone', 'city', 'sub_city', 'country', 'website', 'description', 'logo']
+
+    def __init__(self, *args, **kwargs):
+        super(EditCompanyProfileForm, self).__init__(*args, **kwargs)
+
+        # Add Bootstrap classes to form fields
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
 
 class AddProjectForm(forms.ModelForm):   
     class Meta:

@@ -26,12 +26,16 @@ from .views import (
     SuperuserInvitationView,
     RegistrationErrorView,
     CustomLoginView,
-    CompanyAddProjectView
+    CompanyAddProjectView,
+    ErrorPageView,
+    LandingPageView,
+    AboutUsPageView,
+    CompanyPortfolioPageView,
 )
 
 router = routers.DefaultRouter()
 router.register("api/companies", CompanyViewSet, "companies")
-router.register("api/projects", ProjectViewSet, "projects") #make for each companies
+router.register("api/projects", ProjectViewSet, "projects")  # make for each companies
 router.register("api/companyprofile", CompanyProfileViewSet, "company_profile")
 router.register("api/users", UserViewSet, "users")
 router.register("api/userprofile", UserProfileViewSet, "user_profile")
@@ -43,20 +47,54 @@ router.register("api/photo", ProjectPhotoViewSet, "project_photo")
 
 
 urlpatterns = [
-    path("", include(router.urls)),
-    #path("cms/", views.landing_page, name="landing_page"),
-    path('accounts/signup/', CustomRegistrationView.as_view(), name='account_signup'),
-    path('accounts/login/', CustomLoginView.as_view(), name='account_login'),
-    path('accounts/invite_user/', SuperuserInvitationView.as_view(), name="invite_user"),
-    path('accounts/registration-error/', RegistrationErrorView.as_view(), name="registration-error"),    
+    path("", LandingPageView.as_view(), name="landing_page"),
+    path("about_us/", AboutUsPageView.as_view(), name="aboutus_page"),
+    path("api/", include(router.urls)),
+    path("", LandingPageView.as_view(), name="landing_page"),
+    path("accounts/signup/", CustomRegistrationView.as_view(), name="account_signup"),
+    path("accounts/login/", CustomLoginView.as_view(), name="account_login"),
+    path(
+        "accounts/invite_user/", SuperuserInvitationView.as_view(), name="invite_user"
+    ),
+    path(
+        "accounts/registration-error/",
+        RegistrationErrorView.as_view(),
+        name="registration-error",
+    ),
     path("accounts/user_profile/", ProfileView.as_view(), name="user_profile"),
-    path("accounts/edit_user_profile/", UpdateUserProfileView.as_view(), name="update_user_profile"),    
-    path('accounts/company_signup/', SuperuserSignupView.as_view(), name='company_signup'),
-    path('accounts/company_profile/', CompanyProfileView.as_view(), name='company_profile'),
-    path('accounts/edit_company_profile/', UpdateCompanyProfileView.as_view(), name="update_company_profile"),
-    path('accounts/company_users/', CompanyUsersListView.as_view(), name="company_users"),
-    path('accounts/company_projects/', CompanyProjectsView.as_view(), name="company_projects"),
-    path('accounts/add_project/', CompanyAddProjectView.as_view(), name="add_project"),
+    path(
+        "accounts/edit_user_profile/",
+        UpdateUserProfileView.as_view(),
+        name="update_user_profile",
+    ),
+    path(
+        "accounts/company_signup/", SuperuserSignupView.as_view(), name="company_signup"
+    ),
+    path(
+        "accounts/company_profile/",
+        CompanyProfileView.as_view(),
+        name="company_profile",
+    ),
+    path(
+        "accounts/edit_company_profile/",
+        UpdateCompanyProfileView.as_view(),
+        name="update_company_profile",
+    ),
+    path(
+        "accounts/company_users/", CompanyUsersListView.as_view(), name="company_users"
+    ),
+    path(
+        "accounts/company_projects/",
+        CompanyProjectsView.as_view(),
+        name="company_projects",
+    ),
+    path("accounts/add_project/", CompanyAddProjectView.as_view(), name="add_project"),
+    path("accounts/error_page/", ErrorPageView.as_view(), name="error_page"),
+    path(
+        "company/portfolio/",
+        CompanyPortfolioPageView.as_view(),
+        name="company_portfolio",
+    ),
 ]
 
 if settings.DEBUG:

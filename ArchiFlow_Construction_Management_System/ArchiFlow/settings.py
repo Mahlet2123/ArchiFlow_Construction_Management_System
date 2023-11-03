@@ -34,7 +34,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 
-LOGIN_REDIRECT_URL = '/accounts/user_profile/'
+ACCOUNT_FORMS = {'login': 'cms.forms.UserLoginForm'}
+LOGIN_REDIRECT_URL = '/company/portfolio/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

@@ -33,9 +33,27 @@
         <div class="container fluid">
             <div class="collapse navbar-collapse align-items-center justify-content-center" id="navbarNav">
                 <!-- Logo on the left side -->
-                <a class="navbar-brand mt-2 mt-lg-0" href="#">
+                <a class="navbar-brand mt-2 mt-lg-0" href="{% url 'landing_page' %}">
                     <img src="../../static/images/Logo.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
                 </a>
+                {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'company_signup' or request.resolver_match.url_name == 'landing_page' or request.resolver_match.url_name == 'aboutus_page' %}
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'landing_page' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'aboutus_page' %}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'landing_page' %}">Support</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'company_portfolio' %}">{{ user.company.legal_name }}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                {% endif %}              
                 {% if user.is_authenticated %}
                 {% if user.is_superuser and request.resolver_match.url_name == 'company_profile' or request.resolver_match.url_name == 'company_users' or request.resolver_match.url_name == 'company_projects' %}
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -49,9 +67,11 @@
                         <a class="nav-link" href="{% url 'company_projects' %}">Projects</a>
                     </li>
                 </ul>
+                {% if request.resolver_match.url_name == 'company_users' or request.resolver_match.url_name == 'company_projects' %}
                 <div class="input-group">
                     <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" maxlength="50" style="max-width: 300px;"/>
                 </div>
+                {% endif %}
                 {% endif %}
             </div>
             <!-- Right elements -->
@@ -93,9 +113,6 @@
                                 <li><a class="dropdown-item" href="{% url 'update_user_profile' %}">Edit Profile</a></li>
                                 {% if user.is_superuser %}
                                 <li><a class="dropdown-item" href="{% url 'company_profile' %}">{% trans "Company Profile" %}</a></li>
-                                <li><a class="dropdown-item" href="{% url 'update_company_profile' %}">{% trans "Edit Company Profile" %}</a></li>
-                                <li><a class="dropdown-item" href="{% url 'invite_user' %}">{% trans "Invite User" %}</a></li>
-                                <li><a class="dropdown-item" href="{% url 'add_project' %}">{% trans "Add Project" %}</a></li>
                                 {% endif %}
                                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">{% trans "Logout" %}</a></li>                                
                             </ul>
@@ -115,6 +132,78 @@
     </div>
 
     {% block extra_body %}
-    {% endblock extra_body %}
-  </body>
+<div class="my-5">
+  <!-- Footer -->
+  <footer class="text-center text-lg-start text-white" style="background-color: #2A4365">
+    <!-- Section: Social media -->
+    <div style="background-color: #7EE0FF">
+        <section class="d-flex justify-content-between p-4 container">
+        <!-- Left -->
+        <div class="me-5">
+            <span>Subscribe to stay tuned for new and latest updates. Let's do it!</span>
+        </div>
+        <!-- Right enter your email address bar -->
+
+        <!-- Right -->
+        </section>
+    </div>
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <img src="../../static/images/Logo white.png" alt="Logo" width="100" height="100" class="d-inline-block align-text-top">
+            <p>Enhancing Collaboration and Efficiency in Construction Management</p>
+          </div>
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Services</h6>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
+            <p><a href="#!" class="text-white">Project Management</a></p>
+            <p><a href="#!" class="text-white">Project Co-ordination</a></p>
+            <p><a href="#!" class="text-white">Central Repository </a></p>
+          </div>
+
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Useful links</h6>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
+            <p><a href="#!" class="text-white">About Us</a></p>
+            <p><a href="#!" class="text-white">Contact Us</a></p>
+            <p><a href="#!" class="text-white">FAQ</a></p>
+          </div>
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Contact Us</h6>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
+            <p><i class="fas fa-home mr-3"></i> Lideta, Addis Ababa, Ethiopia</p>
+            <p><i class="fas fa-envelope mr-3"></i> support@archiflow.com</p>
+            <h6 class="text-uppercase fw-bold">Follow us</h6>
+            <div>
+                <a href="" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
+                <a href="" class="text-white me-4"><i class="fab fa-twitter"></i></a>
+                <a href="" class="text-white me-4"><i class="fab fa-instagram"></i></a>
+                <a href="" class="text-white me-4"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      © 2023 Copyright: ArchiFlow
+    </div>
+  </footer>
+</div>
+{% endblock extra_body %}
+</body>
 </html>

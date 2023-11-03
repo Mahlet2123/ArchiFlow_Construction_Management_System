@@ -1,17 +1,122 @@
-{% extends "../base/base.html" %}
-{% block title %}Landing Page{% endblock %}
+{% extends "account/base.html" %}
 
-{% block template%}
-<div class="container">
-    <h1>ArchiFlow CMS</h1>
+{% load i18n %}
 
-    {% if user.is_authenticated %}
-    <h1>Logged in User. :)</h1>
-    {% else %}
-    <h1>You are not Logged in. :(</h1>
-    <p><a href="{% url 'account_login' %}">Log in</a></p>
-    <h6>or</h6>
-    <p><a href="{% url 'account_signup' %}">Sign up</a></p>
-    {% endif %}
+{% block head_title %}{% trans "ArchiFlow - Construction Management System" %}{% endblock head_title %}
+
+{% block content %}
+<!-- Image Section with Dark Background -->
+<div style="background-color: #2A4365">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <img src="../../static/images/background00.jpg" alt="Construction Image" style="height: 500px; object-fit: cover;">
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <!-- Text Section -->
+            <div class="col-lg-12">
+                <div class="brand-info text-center text-white p-5">
+                    <img src="../../static/images/Logo white_text.png" alt="Logo" width=auto height="100" class="d-inline-block align-text-top">
+                    <p>Enhancing Collaboration and Efficiency in Construction Management</p>
+                    <a href="{% url 'company_signup' %}" class="btn btn-primary" style="background-color: #7EE0FF;">Get Started</a>
+                </div>
+                {% if not user.is_authenticated %}
+                <div class="brand-info text-center text-white p-5">
+                    <a href="{% url 'account_login' %}" class="btn btn-primary" style="background-color: #7EE0FF;">Login if you already have an account</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
-{% endblock %}
+<div class="container">
+    <div class="row mt-4 mb-4">
+        <!-- Text Section on the Left -->
+        <div class="col-lg-6">
+            <div class="text-section">
+                <h1>Welcome to ArchiFlow</h1>
+                <p>
+                    When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarks grove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.
+                </p>
+                <p>
+                    When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarks.
+                </p>
+            </div>
+        </div>
+        <!-- Image on the Right -->
+        <div class="col-lg-6 container-fluid p-0">
+            <div class="row">
+                <img src="../../static/images/background02.jpg" alt="Construction Image">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modern Features Section -->
+<div class="features-section" style="background-color: #7EE0FF; padding: 40px;">
+    <div class="container">
+        <div class="row mb-6">
+            <h1 class="text-center mb-4">Our solutions are built for You</h1>
+            <div class="col-lg-4">
+                <div class="feature-card text-center">
+                    <h2>Owners</h2>                    
+                    <i class="fas fa-user-tie feature-icon display-2 mb-4 mt-2"></i>
+                    <p class="feature-description">Empower your construction projects with our Owner-focused solutions. Streamline your project management, financial tracking, and team collaboration, ensuring on-time and on-budget results.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card text-center">
+                    <h2>Architects</h2>                
+                    <i class="fas fa-pencil-ruler feature-icon display-2 mb-4 mt-2"></i>
+                    <p class="feature-description">Elevate your architectural design process with our Architect-centric tools. Seamlessly organize your blueprints, drafts, and project documentation, fostering innovation and precision in your work.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="feature-card text-center">
+                    <h2>Contractors</h2>                    
+                    <i class="fas fa-hard-hat feature-icon display-2 mb-4 mt-2"></i>
+                    <p class="feature-description">Enhance your construction projects with our Contractor-tailored solutions. Efficiently manage tasks, track project progress, and foster collaboration within your team, delivering high-quality results and client satisfaction.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid p-0">
+    <div class="row">
+        <img src="../../static/images/background01.jpg" alt="Construction Image" style="height: 300px; object-fit: cover;">
+    </div>
+</div>
+<!-- Footer -->
+<style>
+    /* Custom CSS for feature cards */
+    .features-section {
+        background-color: #7EE0FF;
+        padding: 40px;
+    }
+
+    .feature-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 2px solid #fff;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        height: 100%;
+    }
+
+    .feature-title {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .feature-description {
+        font-size: 18px;
+    }
+</style>
+
+<!-- Include Bootstrap and jQuery JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock content %}
