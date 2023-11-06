@@ -1,0 +1,47 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Add Project Document" %}{% endblock head_title %}
+
+{% block content %}
+<div class="container py-5 h-100">
+<div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="col col-xl-10">
+        <div class="row g-0">
+        <div class="col-md-6 col-lg-7 d-flex align-items-center">
+            <div class="card-body p-4 p-lg-5 text-black">
+            <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ add_project_document_form.as_p }}
+            <div class="d-flex flex-column align-items-center text-center mt-4">
+                <button class="primaryAction btn btn-lg" type="submit" style="background-color: #7EE0FF;">{% trans "Add Project Document" %}</button>
+            </div>                
+            </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<script>
+$(document).ready(function() {
+$('.datepicker').datepicker({
+    format: 'yyyy-mm-dd',
+    autoclose: true,
+});
+
+$('.timepicker').timepicker({
+    format: 'hh:ii:ss',
+    autoclose: true,
+    showMeridian: false,
+});
+
+$('.datetimepicker').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss',
+    showClear: true
+});
+});
+</script>
+
+{% endblock content %}

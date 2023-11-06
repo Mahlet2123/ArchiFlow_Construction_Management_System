@@ -1,0 +1,238 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Project Detail" %}{% endblock head_title %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><strong>Project Home for {{ project.name }} </strong></h2>
+        <div>
+            <a href="{% url 'company_portfolio' %}">
+                <button class="primaryAction btn" style="background-color: #7EE0FF; border: none;" type="button">Back To Company Portfolio</button>
+            </a>
+        </div>
+    </div>
+    <div class="p-4">
+        <h3>Project Details</h3>
+        <div class="container mt-1 mb-1">
+            <div class="row">
+                <div class="col-md-5 border-right">
+                    <div class="container mt-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-15">
+                                <div class="card p-2">
+                                    <img class="card-img-top" src="/media/{{ project.thumbnail_image }}" alt="{{ project.name }}" style="height: 300px; object-fit: cover;">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title font-weight-bold">{{ project.name }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="p-3 py-5">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><strong>Description</strong></p>
+                                <p class="text-muted">{{ project.description }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><strong>Owner</strong></p>
+                                <p class="text-muted">{{ project.owner }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><strong>Address</strong></p>
+                                <p class="text-muted">{{ project.location }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p><strong>Status</strong></p>
+                                <p class="text-muted">{{ project.status }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Start Date</strong></p>
+                                <p class="text-muted">{{ project.start_date }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>End Date</strong></p>
+                                <p class="text-muted">{{ project.end_date }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="float: left;">
+                <h3>Project Team</h3>
+            </div>
+            {% if user.is_superuser %}
+            <div style="float: right;">
+                <a href="{% url 'add_team_member' project_id=project.id %}">
+                    <button class="primaryAction btn" style="background-color: #7EE0FF; border: none;" type="button"><i class="fas fa-user-plus"></i></button>
+                </a>
+            </div>
+            {% endif %}
+            <div style="clear: both;"></div>
+        </div>
+        <hr>
+        <div class="table-responsive">
+        <table id="teamsTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Role</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    {% if user.is_superuser %}
+                    <th>Action</th>
+                    {% endif %}
+                </tr>
+            </thead>        
+            <tbody>
+                <!-- Data will be populated here -->
+                {% for user_role, user_detail in users_info %}
+                <tr>
+                    <td class="align-middle">{{ user_detail.first_name }} {{ user_detail.last_name}}</td>
+                    <td class="align-middle">{{ user_role.user_role }}</td>
+                    <td class="align-middle">{{ user_detail.user.email }}</td>
+                    <td class="align-middle">{{ user_detail.phone_number }}</td>
+                    {% if user.is_superuser %}
+                    <td>
+                        <a href=""><i class="fas fa-edit" style="color: #7EE0FF;"></i></a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        <br>
+        <h3>Project Schedule</h3>
+        <hr>
+        <div class="col-md-12">    
+            <div id='calendar'></div>
+        </div>
+    </div>
+</div>
+<script>
+    var project_id = JSON.parse('{{ project_id|escapejs|safe }}');
+</script>
+<script>
+   $(document).ready(function () {
+       var calendar = $('#calendar').fullCalendar({
+           header: {
+               left: 'prev,next today',
+               center: 'title',
+               right: 'month,agendaWeek,agendaDay'
+           },
+           events: '/project/all_events/' + project_id + '/',
+           selectable: true,
+           selectHelper: true,
+           editable: true,
+           eventLimit: true,
+           select: function (start, end, allDay) {
+               var title = prompt("Enter Event Title");
+               if (title) {
+                   var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+                   var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+                   $.ajax({
+                       type: "GET",
+                       url: '/project/add_event/' + project_id + '/',
+                       data: {'title': title, 'start': start, 'end': end},
+                       dataType: "json",
+                       success: function (data) {
+                           calendar.fullCalendar('refetchEvents');
+                           alert("Added Successfully");
+                       },
+                       error: function (data) {
+                           console.error('Error:', data.responseText);
+                           alert('There is a problem!!!');
+                       }
+                   });
+               }
+           },
+           eventResize: function (event) {
+               var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+               var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+               var title = event.title;
+               var id = event.id;
+               $.ajax({
+                   type: "GET",
+                   url: '/project/update/' + project_id + '/',
+                   data: {'title': title, 'start': start, 'end': end, 'id': id},
+                   dataType: "json",
+                   success: function (data) {
+                       calendar.fullCalendar('refetchEvents');
+                       alert('Event Update');
+                   },
+                   error: function (data) {
+                       console.log("project.id");
+                       console.error('Error:', data.responseText);
+                       alert('There is a problem!!!');
+                   }
+               });
+           },
+ 
+           eventDrop: function (event) {
+               var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+               var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+               var title = event.title;
+               var id = event.id;
+               $.ajax({
+                   type: "GET",
+                   url: '/project/update/' + project_id + '/',
+                   data: {'title': title, 'start': start, 'end': end, 'id': id},
+                   dataType: "json",
+                   success: function (data) {
+                       calendar.fullCalendar('refetchEvents');
+                       alert('Event Update');
+                   },
+                   error: function (data) {
+                       console.error('Error:', data.responseText);
+                       alert('There is a problem!!!');
+                   }
+               });
+           },
+ 
+           eventClick: function (event) {
+               if (confirm("Are you sure you want to remove it?")) {
+                   var id = event.id;
+                   $.ajax({
+                       type: "GET",
+                       url: '/project/remove/' + project_id + '/',
+                       data: {'id': id},
+                       dataType: "json",
+                       success: function (data) {
+                           calendar.fullCalendar('refetchEvents');
+                           alert('Event Removed');
+                       },
+                       error: function (data) {
+                           console.error('Error:', data.responseText);
+                           alert('There is a problem!!!');
+                       }
+                   });
+               }
+           },
+ 
+       });
+   });
+ 
+</script>
+{% endblock content %}

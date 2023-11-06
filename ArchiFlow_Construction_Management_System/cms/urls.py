@@ -15,14 +15,25 @@ from .api import (
     ProjectPhotoViewSet,
 )
 from .views import (
+    AddEventView,
+    AllEventsView,
     CustomRegistrationView,
+    ProjectDocumentAddView,
+    ProjectDocumentView,
+    ProjectDrawingAddView,
+    ProjectDrawingView,
+    ProjectPhotoAddView,
+    ProjectPhotoView,
+    RemoveEventView,
     SuperuserSignupView,
     CompanyProfileView,
+    UpdateEventView,
     UpdateUserProfileView,
     ProfileView,
     UpdateCompanyProfileView,
     CompanyProjectsView,
     CompanyUsersListView,
+    CompanyUsersDeleteView,
     SuperuserInvitationView,
     RegistrationErrorView,
     CustomLoginView,
@@ -31,6 +42,12 @@ from .views import (
     LandingPageView,
     AboutUsPageView,
     CompanyPortfolioPageView,
+    ProjectDetailView,
+    CompanyProjectsEditView,
+    CompanyProjectsDeleteView,
+    ProjectTeamAddView,
+    ProjectRFIAddView,
+    ProjectRFIView,
 )
 
 router = routers.DefaultRouter()
@@ -47,10 +64,10 @@ router.register("api/photo", ProjectPhotoViewSet, "project_photo")
 
 
 urlpatterns = [
-    path("", LandingPageView.as_view(), name="landing_page"),
-    path("about_us/", AboutUsPageView.as_view(), name="aboutus_page"),
     path("api/", include(router.urls)),
     path("", LandingPageView.as_view(), name="landing_page"),
+    path("about_us/", AboutUsPageView.as_view(), name="aboutus_page"),
+    path("accounts/error_page/", ErrorPageView.as_view(), name="error_page"),
     path("accounts/signup/", CustomRegistrationView.as_view(), name="account_signup"),
     path("accounts/login/", CustomLoginView.as_view(), name="account_login"),
     path(
@@ -71,30 +88,102 @@ urlpatterns = [
         "accounts/company_signup/", SuperuserSignupView.as_view(), name="company_signup"
     ),
     path(
-        "accounts/company_profile/",
+        "company/company_profile/",
         CompanyProfileView.as_view(),
         name="company_profile",
     ),
     path(
-        "accounts/edit_company_profile/",
+        "company/edit_company_profile/",
         UpdateCompanyProfileView.as_view(),
         name="update_company_profile",
     ),
     path(
-        "accounts/company_users/", CompanyUsersListView.as_view(), name="company_users"
+        "company/company_users/", CompanyUsersListView.as_view(), name="company_users"
     ),
     path(
-        "accounts/company_projects/",
+        "company/delete/<int:user_id>",
+        CompanyUsersDeleteView.as_view(),
+        name="delete_company_users",
+    ),
+    path(
+        "company/company_projects/",
         CompanyProjectsView.as_view(),
         name="company_projects",
     ),
-    path("accounts/add_project/", CompanyAddProjectView.as_view(), name="add_project"),
-    path("accounts/error_page/", ErrorPageView.as_view(), name="error_page"),
+    path("company/add_project/", CompanyAddProjectView.as_view(), name="add_project"),
     path(
         "company/portfolio/",
         CompanyPortfolioPageView.as_view(),
         name="company_portfolio",
     ),
+    path(
+        "project/project_detail/<int:project_id>/",
+        ProjectDetailView.as_view(),
+        name="project_detail",
+    ),
+    path(
+        "project/edit/<int:project_id>/",
+        CompanyProjectsEditView.as_view(),
+        name="edit_project",
+    ),
+    path(
+        "project/delete/<int:project_id>/",
+        CompanyProjectsDeleteView.as_view(),
+        name="delete_project",
+    ),
+    path(
+        "project/add_team_member/<int:project_id>/",
+        ProjectTeamAddView.as_view(),
+        name="add_team_member",
+    ),
+    path(
+        "project/add_rfi/<int:project_id>/", ProjectRFIAddView.as_view(), name="add_rfi"
+    ),
+    path(
+        "project/project_rfi/<int:project_id>/",
+        ProjectRFIView.as_view(),
+        name="project_rfi",
+    ),
+    path(
+        "project/add_photo/<int:project_id>/",
+        ProjectPhotoAddView.as_view(),
+        name="add_photo",
+    ),
+    path(
+        "project/project_photo/<int:project_id>/",
+        ProjectPhotoView.as_view(),
+        name="project_photo",
+    ),
+    path(
+        "project/add_document/<int:project_id>/",
+        ProjectDocumentAddView.as_view(),
+        name="add_document",
+    ),
+    path(
+        "project/project_document/<int:project_id>/",
+        ProjectDocumentView.as_view(),
+        name="project_document",
+    ),
+    path(
+        "project/add_drawing/<int:project_id>/",
+        ProjectDrawingAddView.as_view(),
+        name="add_drawing",
+    ),
+    path(
+        "project/project_drawing/<int:project_id>/",
+        ProjectDrawingView.as_view(),
+        name="project_drawing",
+    ),
+    path(
+        "project/all_events/<int:project_id>/",
+        AllEventsView.as_view(),
+        name="all_events",
+    ),
+    path(
+        "project/add_event/<int:project_id>/", AddEventView.as_view(), name="add_event"
+    ),
+    path("project/update/<int:project_id>/", UpdateEventView.as_view(), name="update"),
+    path("project/remove/<int:project_id>/", RemoveEventView.as_view(), name="remove"),
 ]
 
 if settings.DEBUG:

@@ -28,6 +28,8 @@ typing-extensions = "==4.8.0"
 tzdata = "==2023.3"
 urllib3 = "==2.0.5"
 django-cors-headers = "*"
+django-crispy-forms = "*"
+django-bootstrap-datepicker-plus = "*"
 
 [dev-packages]
 

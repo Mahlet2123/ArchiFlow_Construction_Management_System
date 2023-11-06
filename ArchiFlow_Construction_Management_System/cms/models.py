@@ -23,7 +23,12 @@ class Project(models.Model):
     end_date = models.DateField(blank=True)
     location = models.CharField(max_length=100)
     owner = models.CharField(max_length=100)
-    thumbnail_image = models.ImageField(default='No-Image.png', upload_to="project_thumbnail_images/", blank=True, null=True)
+    thumbnail_image = models.ImageField(
+        default="No-Image.png",
+        upload_to="project_thumbnail_images/",
+        blank=True,
+        null=True,
+    )
 
     def __str__(self) -> str:
         return self.name
@@ -83,7 +88,7 @@ class User(AbstractUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     def __str__(self) -> str:
-        return self.username
+        return f"{self.user_set.first().first_name} {self.user_set.first().last_name}"
 
     class Meta:
         """
@@ -112,12 +117,14 @@ class User(AbstractUser, PermissionsMixin):
             ("delete_photo", "Can delete project photos"),
         ]
 
+
 class Invitation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     email = models.EmailField()
     token = models.CharField(max_length=100, unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+
 
 class ProjectUsersRole(models.Model):
     """
@@ -143,14 +150,16 @@ class ProjectUsersRole(models.Model):
 class UserProfile(models.Model):
     """The UserProfile class for other user information"""
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_set")
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     title = models.CharField(max_length=100)
     address = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, blank=True)
     phone_number = models.IntegerField(blank=True, null=True)
-    profile_image = models.ImageField(default='OIP.jpg', upload_to="user_profile_images/", blank=True, null=True)
+    profile_image = models.ImageField(
+        default="OIP.jpg", upload_to="user_profile_images/", blank=True, null=True
+    )
     bio = models.TextField(blank=True)
 
 
@@ -166,7 +175,12 @@ class CompanyProfile(models.Model):
     country = models.CharField(max_length=100)
     website = models.URLField(max_length=200, blank=True)
     description = models.TextField(blank=True)
-    logo = models.ImageField(default='logo-placeholder.png', upload_to="company_logo_images/", blank=True, null=True)
+    logo = models.ImageField(
+        default="logo-placeholder.png",
+        upload_to="company_logo_images/",
+        blank=True,
+        null=True,
+    )
 
 
 class ProjectDocument(models.Model):
@@ -175,7 +189,7 @@ class ProjectDocument(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    file = models.FileField()  # upload_to='uploads/'
+    file = models.FileField(upload_to="document_uploads/")
     upload_date = models.DateField()
 
 
@@ -216,7 +230,7 @@ class ProjectDrawing(models.Model):
     number = models.IntegerField()
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    file = models.FileField()
+    file = models.FileField(upload_to="drawing_uploads/")
     drawing_date = models.DateField()
     received_date = models.DateField()
 
@@ -227,6 +241,18 @@ class ProjectPhoto(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    file = models.FileField()
+    file = models.FileField(upload_to="project_photos/")
     upload_date = models.DateField()
 
+
+class ProjectScheduleEvent(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    start = models.DateTimeField(null=True, blank=True)
+    end = models.DateTimeField(null=True, blank=True)
+    description = models.TextField(blank=True)
+    # color = models.CharField(max_length=20, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "tblevents"

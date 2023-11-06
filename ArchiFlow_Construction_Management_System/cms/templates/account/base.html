@@ -1,41 +1,37 @@
 {% load i18n %}
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block head_title %}{% endblock head_title %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    <!-- Include Bootstrap Datepicker CSS and JS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>      
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+ 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>    
     {% block extra_head %}
     {% endblock extra_head %}
   </head>
   <body>
     {% block body %}
-
-    {% if messages %}
-    <div>
-        <strong>{% trans "Messages:" %}</strong>
-        <ul>
-        {% for message in messages %}
-            <li>{{message}}</li>
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #7EE0FF;">
-        <!-- Container wrapper -->
-        <div class="container fluid">
-            <div class="collapse navbar-collapse align-items-center justify-content-center" id="navbarNav">
-                <!-- Logo on the left side -->
-                <a class="navbar-brand mt-2 mt-lg-0" href="{% url 'landing_page' %}">
-                    <img src="../../static/images/Logo.png" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
-                </a>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top mb-5" style="background-color: #7EE0FF;">
+        <div class="container">
+            <a class="navbar-brand mt-2 mt-lg-0" href="{% url 'landing_page' %}">
+                <img src="{% static 'images/Logo.png' %}" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
                 {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'company_signup' or request.resolver_match.url_name == 'landing_page' or request.resolver_match.url_name == 'aboutus_page' %}
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -53,53 +49,61 @@
                     </li>
                     {% endif %}
                 </ul>
-                {% endif %}              
+                {% endif %}
                 {% if user.is_authenticated %}
-                {% if user.is_superuser and request.resolver_match.url_name == 'company_profile' or request.resolver_match.url_name == 'company_users' or request.resolver_match.url_name == 'company_projects' %}
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'company_profile' %}">General</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'company_users' %}">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'company_projects' %}">Projects</a>
-                    </li>
-                </ul>
-                {% if request.resolver_match.url_name == 'company_users' or request.resolver_match.url_name == 'company_projects' %}
-                <div class="input-group">
+                {% if request.resolver_match.url_name == 'company_portfolio' or request.resolver_match.url_name == 'company_profile' or request.resolver_match.url_name == 'company_users' or request.resolver_match.url_name == 'company_projects' %}
+                <div class="dropdown p-4">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="navbarDropdownMenuAvatar" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Company Tools
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
+                        <li class="dropdown-header">{{ user.company.legal_name }}</li>
+                        <li><a class="dropdown-item" href="{% url 'company_profile' %}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'company_portfolio' %}">Portfolio</a></li>
+                        {% if user.is_superuser %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'company_users' %}">Users</a></li>
+                            <li><a class="dropdown-item" href="{% url 'company_projects' %}">Projects</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% if not request.resolver_match.url_name == 'company_profile' %}
+                <div class="input-group p-4">
                     <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" maxlength="50" style="max-width: 300px;"/>
                 </div>
                 {% endif %}
                 {% endif %}
-            </div>
-            <!-- Right elements -->
-            <div class="d-flex align-items-center">
+                {% if request.resolver_match.url_name == 'project_detail' or request.resolver_match.url_name == 'project_rfi' or request.resolver_match.url_name == 'project_photo' or request.resolver_match.url_name == 'project_document' or request.resolver_match.url_name == 'project_drawing' %}
+                <div class="dropdown p-4">
+                    <button class="btn btn-light dropdown-toggle" type a="button" id="navbarDropdownMenuAvatar" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Project Tools
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
+                        <li class="dropdown-header">General Tools</li>
+                        <li><a class="dropdown-item" href="#">Team</a></li>
+                        <li><a class="dropdown-item" href="#">Schedule</a></li>
+                        <li class="dropdown-header">Project Management</li>
+                        <li><a class="dropdown-item" href="{% url 'project_document' project_id=project.id %}">Documents</a></li>
+                        <li><a class="dropdown-item" href="{% url 'project_rfi' project_id=project.id %}">RFIs</a></li>
+                        <li><a class="dropdown-item" href="{% url 'project_photo' project_id=project.id %}">Photos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'project_drawing' project_id=project.id %}">Drawings</a></li>
+                        <li><a class="dropdown-item" href="#">Specifications</a></li>
+                    </ul>
+                </div>
+                <div class="input-group p-4">
+                    <input type="search" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-addon" maxlength="50" style="max-width: 300px;"/>
+                </div>
+                {% endif %}
+                </div>
+                <div class="d-flex align-items-center ml-auto">
                 <ul class="navbar-nav ms-auto  d-flex align-items-center justify-content-center">
                     <li class="nav-item dropdown">
-                        <!-- Notifications -->
-                        <div class="dropdown">
-                            <button class="btn btn-lg" style="background-color: #7EE0FF; border: none;" type="button" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-bell me-1"></i>
-                                <!--<span class="badge bg-danger">1</span>-->
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                                <li class="dropdown-header">Notifications</li>
-                                <li><a class="dropdown-item" href="#">Some news</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">View All</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <!-- Avatar -->
                         <div class="dropdown">
                             <button class="btn btn-lg d-flex align-items-center" style="background-color: #7EE0FF; border: none;" type="button" id="navbarDropdownMenuAvatar" data-bs-toggle="dropdown" aria-expanded="false">
                                 {% if user_profile.profile_image %}
                                 <img src="/media/{{ user_profile.profile_image }}" class="rounded-circle me-2" width="50px" height="50px" alt="profile_image" loading="lazy">
                                 {% else %}
-                                <img src="../../static/images/OIP.jpg" class="rounded-circle me-2" height="50" alt="profile_image" loading="lazy">
+                                <img src="{% static 'images/OIP.jpg' %}" class="rounded-circle me-2" height="50" alt="profile_image" loading="lazy">
                                 {% endif %}
                                 <div class="d-none d-md-block">
                                     <div>
@@ -119,91 +123,116 @@
                         </div>
                     </li>
                 </ul>
-
+                </div>
+                {% endif %}
             </div>
-            <!-- Right elements --> 
-            {% endif %}
         </div>
     </nav>
-      {% block content %}
-      {% endblock content %}
-
-      {% endblock body %}
+    {% if messages %}
+    <div class="alert alert-info" id="auto-dismiss-alert">
+        <strong>{% trans "Messages:" %}</strong>
+        <ul class="list-group">
+        {% for message in messages %}
+            <li class="list-group-item">{{ message }}</li>
+        {% endfor %}
+        </ul>
     </div>
-
+    {% endif %}
+    <div class="mt-5">
+    {% block content %}
+    {% endblock content %}
+    {% endblock body %}
+    </div>
     {% block extra_body %}
-<div class="my-5">
-  <!-- Footer -->
-  <footer class="text-center text-lg-start text-white" style="background-color: #2A4365">
-    <!-- Section: Social media -->
-    <div style="background-color: #7EE0FF">
-        <section class="d-flex justify-content-between p-4 container">
-        <!-- Left -->
-        <div class="me-5">
-            <span>Subscribe to stay tuned for new and latest updates. Let's do it!</span>
-        </div>
-        <!-- Right enter your email address bar -->
-
-        <!-- Right -->
-        </section>
-    </div>
-    <!-- Section: Links  -->
-    <section class="">
-      <div class="container text-center text-md-start mt-5">
-        <!-- Grid row -->
-        <div class="row mt-3">
-          <!-- Grid column -->
-          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-            <!-- Content -->
-            <img src="../../static/images/Logo white.png" alt="Logo" width="100" height="100" class="d-inline-block align-text-top">
-            <p>Enhancing Collaboration and Efficiency in Construction Management</p>
-          </div>
-
-          <!-- Grid column -->
-          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-            <!-- Links -->
-            <h6 class="text-uppercase fw-bold">Services</h6>
-            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
-            <p><a href="#!" class="text-white">Project Management</a></p>
-            <p><a href="#!" class="text-white">Project Co-ordination</a></p>
-            <p><a href="#!" class="text-white">Central Repository </a></p>
-          </div>
-
-          <!-- Grid column -->
-          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-            <!-- Links -->
-            <h6 class="text-uppercase fw-bold">Useful links</h6>
-            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
-            <p><a href="#!" class="text-white">About Us</a></p>
-            <p><a href="#!" class="text-white">Contact Us</a></p>
-            <p><a href="#!" class="text-white">FAQ</a></p>
-          </div>
-
-          <!-- Grid column -->
-          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-            <!-- Links -->
-            <h6 class="text-uppercase fw-bold">Contact Us</h6>
-            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
-            <p><i class="fas fa-home mr-3"></i> Lideta, Addis Ababa, Ethiopia</p>
-            <p><i class="fas fa-envelope mr-3"></i> support@archiflow.com</p>
-            <h6 class="text-uppercase fw-bold">Follow us</h6>
-            <div>
-                <a href="" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
-                <a href="" class="text-white me-4"><i class="fab fa-twitter"></i></a>
-                <a href="" class="text-white me-4"><i class="fab fa-instagram"></i></a>
-                <a href="" class="text-white me-4"><i class="fab fa-linkedin"></i></a>
+    <div class="my-5">
+        <footer class="text-center text-lg-start text-white" style="background-color: #2A4365">
+            <div style="background-color: #7EE0FF">
+                <section class="d-flex justify-content-between p-4 container">
+                    <div class="me-5">
+                        <span>Subscribe to stay tuned for new and latest updates. Let's do it!</span>
+                    </div>
+                </section>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-      © 2023 Copyright: ArchiFlow
+            <section class="">
+                <div class="container text-center text-md-start mt-5">
+                    <div class="row mt-3">
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <img src="{% static 'images/Logo white.png' %}" alt="Logo" width="100" height="100" class="d-inline-block align-text-top">
+                            <p>Enhancing Collaboration and Efficiency in Construction Management</p>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold">Services</h6>
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
+                            <p><a href="#!" class="text-white">Project Management</a></p>
+                            <p><a href="#!" class="text-white">Project Co-ordination</a></p>
+                            <p><a href="#!" class="text-white">Central Repository</a></p>
+                        </div>
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold">Useful links</h6>
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
+                            <p><a href="#!" class="text-white">About Us</a></p>
+                            <p><a href="#!" class="text-white">Contact Us</a></p>
+                            <p><a href="#!" class="text-white">FAQ</a></p>
+                        </div>
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <h6 class="text-uppercase fw-bold">Contact Us</h6>
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7EE0FF; height: 2px"/>
+                            <p><i class="fas fa-home mr-3"></i> Lideta, Addis Ababa, Ethiopia</p>
+                            <p><i class="fas fa-envelope mr-3"></i> support@archiflow.com</p>
+                            <h6 class="text-uppercase fw-bold">Follow us</h6>
+                            <div>
+                                <a href="" class="text-white me-4"><i class="fab fa-facebook-f"></i></a>
+                                <a href="" class="text-white me-4"><i class="fab fa-twitter"></i></a>
+                                <a href="" class="text-white me-4"><i class="fab fa-instagram"></i></a>
+                                <a href="" class="text-white me-4"><i class="fab fa-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+                © 2023 Copyright: ArchiFlow
+            </div>
+        </footer>
     </div>
-  </footer>
-</div>
-{% endblock extra_body %}
-</body>
+    {% endblock extra_body %}
+    </body>
+{% if not request.resolver_match.url_name == 'landing_page' %}
+{% if not request.resolver_match.url_name == 'aboutus_page' %}
+{% block custom_padding__style %}    
+<style>
+    body {
+        padding-top: 100px; /* Adjust the value to match the height of your navbar */
+    }
+</style>
+{% endblock custom_padding__style %}
+{% endif %}
+{% endif %}
+<script>
+    setTimeout(function() {
+        var alert = document.getElementById('auto-dismiss-alert');
+        if (alert) {
+            alert.style.display = 'none';
+        }
+    }, 5000);
+</script>
+<script>
+    $(document).ready(function() {
+        $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        });
+
+        $('.timepicker').timepicker({
+        format: 'hh:ii:ss',
+        autoclose: true,
+        showMeridian: false,
+        });
+
+        $('.datetimepicker').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
+        showClear: true
+        });
+    });
+</script>
 </html>

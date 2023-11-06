@@ -11,19 +11,15 @@ from .models import (
     DrawingCategory,
     ProjectDrawing,
     ProjectPhoto,
-    Invitation
+    Invitation,
+    ProjectUsersRole,
+    ProjectScheduleEvent,
 )
 
 
 class UserAdminConfig(UserAdmin):
     search_fields = ("email", "username")
-    list_display = (
-        "email",
-        "username",
-        "is_active",
-        "is_staff",
-        "is_superuser",
-    )
+    list_display = ("email", "username", "is_active", "is_staff", "is_superuser", "id")
 
     fieldsets = (
         (None, {"fields": ("email", "username")}),
@@ -44,3 +40,5 @@ admin.site.register(DrawingCategory)
 admin.site.register(ProjectDrawing)
 admin.site.register(ProjectPhoto)
 admin.site.register(Invitation)
+admin.site.register(ProjectUsersRole)
+admin.site.register(ProjectScheduleEvent)

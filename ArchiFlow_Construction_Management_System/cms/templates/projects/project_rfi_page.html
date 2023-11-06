@@ -1,0 +1,77 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Add Project" %}{% endblock head_title %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div style="float: left;">
+        <h2><strong>Project RFI</strong></h2>
+    </div>
+    <div style="float: right;">
+        {% if user.is_superuser %}
+        <a href="{% url 'add_rfi' project_id=project.id %}">
+            <button class="primaryAction btn" style="background-color: #7EE0FF; border: none;" type="button"><i class="fas fa-user-plus"></i></button>
+        </a>
+        {% endif %}
+        <a href="{% url 'project_detail' project_id=project.id %}">
+            <button class="primaryAction btn" style="background-color: #7EE0FF; border: none;" type="button">Back To Project Detail Page</button>
+        </a>              
+    </div>
+    <div style="clear: both;"></div>
+    <hr>
+</div>
+<div class="container table-responsive">
+<table id="teamsTable" class="table table-striped">
+    <colgroup>
+        <!-- Define the width for each column in the colgroup -->
+        <col style="width: 5%;">
+        <col style="width: 15%;">
+        <col style="width: 10%;">
+        <col style="width: 12%;">
+        <col style="width: 12%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 7%;">
+        <col style="width: 7%;">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>RFI #</th>
+            <th>Subject</th>
+            <th>Stage</th>
+            <th>Responsible Contractor</th>
+            <th>Received From</th>
+            <th>Due Date</th>
+            <th>Date Initiated</th>
+            <th>Closed Date</th>
+            <th>Status</th>            
+            <th>More</th>
+        </tr>
+    </thead>        
+    <tbody>
+        <!-- Data will be populated here -->
+        {% for rfi in rfis %}
+        <tr>
+            <td class="align-middle" style="text-align: center;">{{ rfi.id }}</td>
+            <td class="align-middle">{{ rfi.subject }}</td>
+            <td class="align-middle">{{ rfi.stage }}</td>            
+            <td class="align-middle">{{ rfi.responsible_contractor }}</td>
+            <td class="align-middle">{{ rfi.received_from }}</td>
+            <td class="align-middle">{{ rfi.due_date }}</td>
+            <td class="align-middle">{{ rfi.date_initiated }}</td>
+            <td class="align-middle">{{ rfi.closed_date }}</td>
+            <td class="align-middle">{{ rfi.status }}</td>
+            <td class="align-middle">
+                <a href=""><i class="fas fa-edit" style="color: #7EE0FF;"></i></a>
+                <a href=""><i class="fas fa-info-circle" style="color: #7EE0FF;"></i></a>
+                <a href="" onclick="return confirm('Are you sure you want to delete this project?');"><i class="fas fa-trash" style="color: red;"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock content %}
